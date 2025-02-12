@@ -1,0 +1,138 @@
+import java.util.ArrayList;
+
+public class Tablero {
+    
+    private final char[][] tablero = new char[20][12];
+    private final char[][] tableroCopy = new char[20][12];
+    private Puntos puntos = new Puntos();
+    private Niveles nivel = new Niveles();
+    
+
+
+    public Tablero(){
+        setTablero();
+        
+    }
+
+
+    private void setTablero(){
+        for(int i=1;i<20;i++){
+            for(int j=0;j<12;j++){
+                if(j==0 || j==11 )
+                    tablero[i][j]= '#';
+                else
+                    tablero[i][j]= ' ';
+                if(i==19)
+                    tablero[i][j]= '#';  
+            } 
+        }
+        copiarTablero();
+    }
+
+
+    public void copiarTablero(){
+        cambiarSigno();
+        for(int i=0;i<20;i++){
+            System.arraycopy(tablero[i], 0, tableroCopy[i], 0, 12); 
+        }
+    }
+
+    public void coiparTableroCopy(){
+        for(int i=0;i<20;i++){
+            System.arraycopy(tableroCopy[i], 0, tablero[i], 0, 12); 
+        }
+    }
+
+    public char[][] getTablero() {
+        return tablero;
+    }
+
+    public char[][] getTableroCopy() {
+        return tableroCopy;
+    }
+
+    public void dibujarTablero(){
+        for(int i=0;i<20;i++){
+            for(int j=0;j<12;j++){
+                System.out.print(tablero[i][j]+" ");
+                if(i==1 && j==11)
+                    System.out.print("Puntaje:"+puntos.getPuntos());
+                if(i==2 && j==11)
+                    System.out.print("Lineas:"+puntos.getLineas());
+                if(i==3 && j==11)
+                    System.out.print("Nivel:"+nivel.getNivel());
+            } 
+            System.out.println("");
+        }
+    }
+
+    private void cambiarSigno(){
+        for(int i=0;i<20;i++){
+            for(int j=0;j<12;j++){
+                if(tablero[i][j]=='1'){
+                    tablero[i][j]='@';
+                }
+            } 
+        }
+    }
+
+
+    public void detectarLineas(){
+        ArrayList<Integer> lineas = new ArrayList<>();
+        int c=0;
+        for(int i=1;i<19;i++){
+            for (int j= 1; j < 11; j++) {
+                if(tablero[i][j]=='@')
+                    c++;
+                else{
+                    c=0;
+                    break;
+                }
+            }
+            if(c==10){
+                c=0;
+                lineas.add(i);
+            }
+        }
+
+        for(int s : lineas){
+            System.out.print(s+" ");
+        }
+
+        if(!lineas.isEmpty())
+            borrarLineas(lineas);
+    }
+
+    private void borrarLineas(ArrayList<Integer> lineas){
+        for(int l : lineas){
+            for (int j= 1; j < 11; j++) {
+                tablero[l][j] = ' ';
+            }
+        }
+
+        moverHaciaAbajo(lineas);
+    }
+
+    private void moverHaciaAbajo(ArrayList<Integer> lineas){
+        
+
+        for(int l:lineas){
+            for(int i=l;i>1;i--){
+                System.arraycopy(tablero[i-1], 1, tablero[i], 1, 10);
+            }
+        }
+
+        puntos.sumarLineas(lineas.size());
+        copiarTablero();
+    }
+
+    public Puntos getPuntos() {
+        return puntos;
+    }
+
+    public Niveles getNivel() {
+        return nivel;
+    }
+
+
+}
