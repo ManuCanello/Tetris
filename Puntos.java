@@ -24,19 +24,23 @@ public class Puntos {
         switch (l) {
             case 1 -> {
                 this.puntos+=100;
-                lineas++;
+                this.lineas++;
+                
             }
             case 2 -> {
                 this.puntos+=200;
-                lineas++;
+                this.lineas+=2;
+                
             }
             case 3 -> {
                 this.puntos+=300;
-                lineas++;
+                this.lineas+=3;
+                
             }
             case 4 -> {
                 this.puntos+=400;
-                lineas++;
+                this.lineas+=4;
+                
             }
             default -> {
             }

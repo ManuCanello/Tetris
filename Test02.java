@@ -6,14 +6,14 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 public class Test02 implements KeyListener {
-    Tablero tablero = new Tablero();
-    ArrayList<Fichas> fichas = new ArrayList<>();
     
-    int posX=4;
-    int posY=0;
+    private final Tablero tablero = new Tablero();
+    private ArrayList<Fichas> fichas = new ArrayList<>();
+    private int posX=4;
+    private int posY=0;
     private static final long ms = 250;
     private long lastPressTime = 0;
-
+    
     public static void main(String[] args) {
         new Test02();
     }
@@ -24,24 +24,28 @@ public class Test02 implements KeyListener {
         pantalla.addKeyListener(this);
         pantalla.setVisible(true);
         pantalla.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addFicha();
+        setProximaFicha();
+        setProximaFicha();
+        tablero.setNextFicha(fichas.get(0));
         moverPieza();
         
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
         if(e.getKeyChar() == 'c'){
-            Pantalla.borrarPantalla();
-            tablero.dibujarTablero();
                 
             long currentTime = System.currentTimeMillis();
         
             if (currentTime - lastPressTime <= ms) {
             
             } else {
-                posY--;
+                if(posY!=0)
+                    posY--;
             }
 
             lastPressTime = currentTime;
@@ -56,8 +60,7 @@ public class Test02 implements KeyListener {
         }
 
         if(e.getKeyChar() == 'd'){
-            Pantalla.borrarPantalla();
-            tablero.dibujarTablero();
+            
             if(!colisionDerecha()){
                 posX++;
                 
@@ -66,7 +69,8 @@ public class Test02 implements KeyListener {
                 if (currentTime - lastPressTime <= ms) {
                     
                 } else {
-                    posY--;
+                    if(posY!=0)
+                        posY--;
                 }
 
                 lastPressTime = currentTime;
@@ -76,8 +80,8 @@ public class Test02 implements KeyListener {
         }
 
         if(e.getKeyChar() == 'a'){
-            Pantalla.borrarPantalla();
-            tablero.dibujarTablero();
+            
+            
             if(!colisionIzquierda()){
                 posX--;
                 
@@ -86,21 +90,19 @@ public class Test02 implements KeyListener {
                 if (currentTime - lastPressTime <= ms) {
                 
                 } else {
-                    posY--;
+                    if(posY!=0)
+                        posY--;
                 }
 
                 lastPressTime = currentTime;
                 
     
             }
-                
         }
 
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
+        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            caerRapido();
+        }
     }
 
     @Override
@@ -124,7 +126,6 @@ public class Test02 implements KeyListener {
             
         }
 
-        tablero.dibujarTablero();
         
     }
 
@@ -174,8 +175,11 @@ public class Test02 implements KeyListener {
     private void moverPieza(){
         boolean continuar = perdedor();
         while(!continuar){
-
+        
+            
             imprimirPieza();
+            tablero.dibujarTablero();
+            tablero.setNextFicha(fichas.get(1));
             Pantalla.esperar(tablero.getNivel().getVelocidad());
             Pantalla.borrarPantalla();
             
@@ -186,31 +190,32 @@ public class Test02 implements KeyListener {
                 if(perdedor()){
                     continuar=true;
                 }else{
+                    setProximaFicha();
                     tablero.copiarTablero();
                     tablero.detectarLineas();
                     tablero.getPuntos().sumarPiezaColocada();
                     borrarFicha();
-                    addFicha();
+                    setProximaFicha(); 
                     resetearPos(); 
                 }
             }
             
         }
+
+
         
     }
 
 
-    private void addFicha(){
-        fichas.add(getFichaAlAzar());
-    }
+    
 
     public void borrarFicha(){
-        fichas.clear();
+        fichas.remove(0);
     }
 
     public boolean perdedor(){
-        for(int i=1;i<11;i++){
-            if(tablero.getTablero()[1][i]=='@')
+        for(int i=0;i<12;i++){
+            if(tablero.getTablero()[3][i]=='@')
                 return true;
         }
 
@@ -218,38 +223,52 @@ public class Test02 implements KeyListener {
     }
 
     public void resetearPos(){
-        posY=1;
+        posY=0;
         posX=4;
         
     }
 
-    private Fichas getFichaAlAzar(){
+    private void setProximaFicha(){
         Random ra = new Random();
         int numero = ra.nextInt(7)+1;
         
         switch (numero) {
             case 1 -> {
-                return new T();
+                this.fichas.add(new T());
             }
             case 2 -> {
-                return new C();
+                this.fichas.add(new C());
             }
             case 3 -> {
-                return new L();
+                this.fichas.add(new L());
             }
             case 4 ->{
-                return new J();
+                this.fichas.add(new J());
             }
             case 5 ->{
-                return new I();
+                this.fichas.add(new I());
             }
             case 6 ->{
-                return new Z();
+                this.fichas.add(new Z());
             }
             case 7 ->{
-                return new S();
+                this.fichas.add(new S());
             }
             default -> throw new AssertionError();
-        }
+            }
+        
     }
+
+
+
+    public void setProxima(){
+        tablero.setNextFicha(fichas.get(1));
+    }
+
+    public void caerRapido(){
+        if(!colisionAbajo())
+            posY++;
+        
+    }
+    
 }
