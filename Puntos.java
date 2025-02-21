@@ -21,31 +21,9 @@ public class Puntos {
     }
 
     public void sumarLineas(int l){
-        switch (l) {
-            case 1 -> {
-                this.puntos+=100;
-                this.lineas++;
-                
-            }
-            case 2 -> {
-                this.puntos+=200;
-                this.lineas+=2;
-                
-            }
-            case 3 -> {
-                this.puntos+=300;
-                this.lineas+=3;
-                
-            }
-            case 4 -> {
-                this.puntos+=400;
-                this.lineas+=4;
-                
-            }
-            default -> {
-            }
-                
-        }
+        this.puntos+=l*100;
+        this.lineas+=l;
+            
     }
 
     public int getLineas() {
