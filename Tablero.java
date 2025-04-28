@@ -14,13 +14,6 @@ public class Tablero {
 
     public Tablero(){
         setTablero();
-        nivel.nextNivel();
-        nivel.nextNivel();
-        nivel.nextNivel();
-        nivel.nextNivel();
-        nivel.nextNivel();
-        nivel.nextNivel();
-        nivel.nextNivel();
     }
 
 
