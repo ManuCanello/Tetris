@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JFrame;
 
-public class Test02 implements KeyListener {
+public class Juego implements KeyListener {
     
     private final Tablero tablero = new Tablero();
     private ArrayList<Fichas> fichas = new ArrayList<>();
@@ -13,12 +13,8 @@ public class Test02 implements KeyListener {
     private int posY=0;
     private static final long ms = 250;
     private long lastPressTime = 0;
-    
-    public static void main(String[] args) {
-        new Test02();
-    }
 
-    public Test02(){
+    public Juego(){
         JFrame pantalla = new JFrame();
         pantalla.setSize(0,0);
         pantalla.addKeyListener(this);
